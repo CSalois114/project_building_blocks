@@ -10,7 +10,7 @@ module Enumerable
 
     def my_select
       selection = []
-      self.my_each { |elem| selection << elem if yield(elem)}       
+      self.my_each { |elem| selection.push(elem) if yield(elem)}       
       selection
     end 
 
@@ -40,12 +40,12 @@ module Enumerable
       result
     end
 
-    def my_inject(init=0)
-      result = self[init]
-      self[init..-1].size.times do |index| 
-        result = yield(result, self[index + 1]) if self[index + 1]
+    def my_inject(start_value=nil)
+      self.unshift(start_value) if start_value
+      self.size.times do |index|
+        self[index + 1] = yield(self[index], self[index + 1]) if self[index + 1]
       end
-      result
+      self[-1]
     end
     
   end
